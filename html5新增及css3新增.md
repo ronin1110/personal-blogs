@@ -1,3 +1,5 @@
+
+
 # html5新增及css3新增
 
 ## html5新增
@@ -348,3 +350,109 @@ div
 属性取值和上面的background-origin一样
 
 （从padding-box，border-box或者content-box开始）
+
+
+
+### 新增的文字效果
+
+#### text-shadow
+
+文字阴影
+
+```css
+h1
+{
+text-shadow: 5px 5px 5px #FF0000;
+}
+```
+
+| 值         | 描述                                |
+| :--------- | :---------------------------------- |
+| *h-shadow* | 必需。水平阴影的位置。允许负值。    |
+| *v-shadow* | 必需。垂直阴影的位置。允许负值。    |
+| *blur*     | 可选。模糊的距离。                  |
+| *color*    | 可选。阴影的颜色。参阅 CSS 颜色值。 |
+
+#### word-wrap
+
+文字自动换行
+
+```css
+p {word-wrap:break-word;}
+
+
+```
+
+| 值         | 描述                                         |
+| :--------- | :------------------------------------------- |
+| normal     | 只在允许的断字点换行（浏览器保持默认处理）。 |
+| break-word | 在长单词或 URL 地址内部进行换行。            |
+
+
+
+### 新增的动画效果
+
+#### transform
+
+变换效果
+
+css3提供了元素变形效果，也叫做变换。它可以将元素实现旋转、缩放和平移的功能。
+
+取值太多，不列举了
+
+https://www.runoob.com/cssref/css3-pr-transform.html
+
+#### animation动画效果
+
+CSS3 提供了类似 Flash 关键帧控制的动画效果，通过 animation 属性实现。那么之前的 transition 属性只能通过指定属性的初始状态和结束状态来实现动画效果，有一定的局限性。
+
+animation 实现动画效果主要由两个部分组成：1、通过类似 Flash 动画中的关键帧声明一个动画；2、在 animation 属性中调用关键帧声明的动画。
+
+```css
+div
+{
+width:100px;
+height:100px;
+background:red;
+position:relative;
+animation:mymove 5s infinite;
+-webkit-animation:mymove 5s infinite; /*Safari and Chrome*/
+}
+
+@keyframes mymove
+{
+from {left:0px;}
+to {left:200px;}
+}
+```
+
+### 新增的过渡属性
+
+#### transition
+
+过渡效果一般是通过一些简单的 CSS 动作触发平滑过渡功能，比如：:hover、:focus、:active、:checked 等。CSS3 提供了 transition 属性来实现这个过渡功能。
+
+```css
+div
+{
+width:100px;
+height:100px;
+background:blue;
+transition:width 2s;
+-moz-transition:width 2s; /* Firefox 4 */
+-webkit-transition:width 2s; /* Safari and Chrome */
+-o-transition:width 2s; /* Opera */
+}
+
+div:hover
+{
+width:300px;
+}
+```
+
+| 属性值                     | 描述                                |
+| -------------------------- | ----------------------------------- |
+| transition-property        | 规定设置过渡效果的 CSS 属性的名称。 |
+| transition-duration        | 规定完成过渡效果需要多少秒或毫秒。  |
+| transition-timing-function | 规定速度效果的速度曲线。            |
+| transition-delay           | 定义过渡效果何时开始。              |
