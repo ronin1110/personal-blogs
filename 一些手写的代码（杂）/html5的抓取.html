@@ -1,0 +1,45 @@
+<!--
+ * @Description: 
+ * @Author: yaolin
+ * @Date: 2020-12-30 23:27:21
+ * @LastEditors: yaolin
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>html5抓取</title>
+  <style>
+    #target{
+      background-color: brown;
+      width: 300px;
+      height: 300px;
+    }
+    #image{
+      background-color: blue;
+    }
+  </style>
+</head>
+<body>
+  <div id="target" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+  <img id="image" src="https://www.baidu.com/img/flexible/logo/pc/result.png" ondragstart="drag(event)" alt="百度图片">
+
+  <script>
+    let drag = function(e) {
+      e.dataTransfer.setData('text', e.target.id)
+      console.log('drag')
+    }
+
+    let drop =function (e) {
+      e.preventDefault();
+      var data = e.dataTransfer.getData('text');
+      e.target.appendChild(document.getElementById(data))
+    }
+    
+    let allowDrop = function(e) {
+      e.preventDefault();
+    }
+  </script>
+</body>
+</html>

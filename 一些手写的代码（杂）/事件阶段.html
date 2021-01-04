@@ -1,0 +1,41 @@
+<!--
+ * @Description: 
+ * @Author: yaolin
+ * @Date: 2020-12-30 22:41:54
+ * @LastEditors: yaolin
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>事件流</title>
+</head>
+<body>
+  <ul >
+    <li >
+      <button>点我！</button>
+    </li>
+  </ul>
+  <script>
+    window.onload = function() {
+      const ul = document.querySelector('ul');
+      ul.addEventListener('click', function() {
+        console.log('ul')
+      })
+
+      const li = document.querySelector('li');
+      li.addEventListener('click', function() {
+        console.log('li')
+      })
+      
+      const button = document.querySelector('button');
+      button.addEventListener('click', function(e) {
+        console.log('button')
+      })
+      // 默认冒泡，第三个参数true在捕获阶段 false为冒泡阶段（默认）
+      // event.stopPropagation();用来取消默认的冒泡事件
+    }
+  </script>
+</body>
+</html>
