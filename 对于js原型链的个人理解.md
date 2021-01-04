@@ -68,14 +68,17 @@ var person = new Person("Alice", 23);
 
 ```js
 function myNew(constructor, ...arg) {
-  var obj = {}
+  var obj = Object.create(constructor.prototype) 
+  // var obj = {}
   var res = constructor.apply(obj, arg)
+ //  obj.__proto__ = constructor.prototype
   return typeof(res) === 'object' ? res : obj
 }
 
 function Person (name) {
   this.name = name
 }
+
 let test = myNew(Person, 'yaolin')
 ```
 
