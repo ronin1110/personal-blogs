@@ -456,3 +456,9 @@ width:300px;
 | transition-duration        | 规定完成过渡效果需要多少秒或毫秒。  |
 | transition-timing-function | 规定速度效果的速度曲线。            |
 | transition-delay           | 定义过渡效果何时开始。              |
+
+
+
+
+
+![图](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/567d894c8b014ed8acc6071914dc36bd~tplv-k3u1fbpfcp-zoom-1.image)
