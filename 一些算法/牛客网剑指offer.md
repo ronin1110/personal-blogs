@@ -122,3 +122,37 @@ function jumpFloorII(number)
 
 
 
+## 合并两个排序的链表
+
+输入两个单调递增的链表，输出两个链表合成后的链表，当然我们需要合成后的链表满足单调不减规则。
+
+
+
+```js
+/*function ListNode(x){
+    this.val = x;
+    this.next = null;
+}*/
+function Merge(p1, p2) // 传入的是两个头节点
+{
+    // write code here
+// 其中一个链表为空的时候 返回另一个节点
+  if(p1 == null) {
+    return p2
+  }
+  if(p2 == null) {
+    return p1
+  }
+  
+  let result = null // 用以保存临时节点
+  if(p1.val < p2.val) {
+    result = p1
+    result.next = Merge(p1.next, p2)
+  } else {
+    result = p2
+    result.next = Merge(p1, p2.next)
+  }
+  return result
+}
+```
+
