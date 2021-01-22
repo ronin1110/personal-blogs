@@ -10,7 +10,7 @@
 | indexOf     | 查找某一个元素第一次出现的位置        |
 | lastIndexof | 查找某一元素最后一次出现的位置        |
 | findIndex   | 查找某元素第一次出现的位置            |
-| foreach     | 遍历数组                              |
+| forEach     | 遍历数组                              |
 | map         | 遍历数组                              |
 | filter      | 过滤数组                              |
 | some        | 包含某元素                            |
@@ -35,13 +35,13 @@
 
 
 
-## foreach和map
+## forEach和map
 
 两者都是会执行一个回调函数，便利执行数组中的每一项，支持有三个参数：array.map(function(item,index,array){……操作})
 
 匿名函数的this指向都是window
 
-foreach没有返回值，map有返回值，需要return出来
+forEach没有返回值，map有返回值，需要return出来
 
 
 

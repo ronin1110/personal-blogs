@@ -81,3 +81,19 @@ cache.put(4, 4);    // 该操作会使得关键字 1 作废
 console.log(cache.get(1));       // 返回 -1 (未找到)
 console.log(cache.get(3));       // 返回  3
 console.log(cache.get(4));       // 返回  4
+
+// function multiply(array)
+// {
+//     // write code here
+//   let res = []
+//   for(let i =0 ;i<array.length; i++) {
+//     let temp = 1
+//     array.forEach((val, index) => {
+//       if(index !== i) {
+//         temp *= array[i]
+//       }
+//     })
+//     res.push[temp]
+//   }
+//   return res
+// }
