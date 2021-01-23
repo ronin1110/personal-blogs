@@ -428,3 +428,162 @@ function reConstructBinaryTree(pre, vin) // 递归关注点 是输入什么东�
 }
 ```
 
+
+
+
+
+## 二维数组中的查找
+
+在一个二维数组中（每个一维数组的长度相同），每一行都按照从左到右递增的顺序排序，每一列都按照从上到下递增的顺序排序。请完成一个函数，输入这样的一个二维数组和一个整数，判断数组中是否含有该整数。
+
+
+
+```js
+// while(line=readline()){
+//     var index=line.indexOf(",");
+//     var left=parseInt(line.substring(0,index));
+//     var right=JSON.parse(line.substring(index+1));
+//     print(Find(left,right))
+// }
+function Find(target, array)
+{
+    // write code here 
+// 暴力破解
+//   for(let i = 0; i<array.length; i++) {
+//     for(let j = 0; j<array[0].length; j++) {
+//       if(array[i][j] === target) {
+//         return true
+//       }
+//     }
+//   }
+//   return false
+  
+  let i = 0
+  let j = array[0].length-1
+  
+  // 当 m < target，由于 m 已经是该行最大的元素，想要更大只有从列考虑，取值右移一位
+// 当 m > target，由于 m 已经是该列最小的元素，想要更小只有从行考虑，取值上移一位
+// 当 m = target，找到该值，返回 true
+  while(i < array.length && j >= 0) {
+    if(array[i][j] === target) {
+      return true
+    }
+    else if (array[i][j] > target) {
+      j--
+    }
+    else if (array[i][j] < target) {
+      i++
+    }
+  }
+  return false
+}
+```
+
+
+
+
+
+## 跳台阶
+
+一只青蛙一次可以跳上1级台阶，也可以跳上2级。求该青蛙跳上一个n级的台阶总共有多少种跳法（先后次序不同算不同的结果）。
+
+
+
+```js
+function jumpFloor(number)
+{
+    // write code here
+  
+  if(number == 1) {
+    return 1
+  }
+  if(number == 2) {
+    return 2
+  }
+  
+  let count = jumpFloor(number-1) +jumpFloor(number-2) // f(n)= f[n-1] + f{n-2} 斐波那契数列
+  
+  return count
+  
+      // write code here
+//     if(number==1) return 1;
+//     if(number==2) return 2;
+//     var pre1=1,pre2=2,cur=0;
+//     for(var i=3;i<=number;i++){
+//         cur = pre1+pre2;
+//         pre1 = pre2;
+//         pre2 = cur;
+//     }
+//     return cur;
+}
+```
+
+
+
+## 从上到下打印二叉树的每个节点
+
+从上往下打印出二叉树的每个节点，同层节点从左至右打印。
+
+```js
+/* function TreeNode(x) {
+    this.val = x;
+    this.left = null;
+    this.right = null;
+} */
+// 输入一个根节点,push进数组节点的值，
+function PrintFromTopToBottom(root)
+{
+    // write code here
+  if(!root) {return true}
+  
+  let queue = []
+  
+  let res = []
+  queue.push(root) 
+  
+  // 广度优先 队列实现！
+  
+  while(queue.length !== 0) {
+    let node = queue.shift()
+    res.push(node.val)
+    if(node.left !== null) {
+      queue.push(node.left)
+    }
+    if(node.right !== null) {
+      queue.push(node.right)
+    }
+  }
+  return res
+}
+```
+
+
+
+## 矩形覆盖
+
+我们可以用2*1的小矩形横着或者竖着去覆盖更大的矩形。请问用n个2*1的小矩形无重叠地覆盖一个2*n的大矩形，总共有多少种方法？
+
+比如n=3时，2*3的矩形块有3种覆盖方法：
+
+![img](https://uploadfiles.nowcoder.com/images/20201028/59_1603852524038_7FBC41C976CACE07CB222C3B890A0995)
+
+```js
+function rectCover(number)
+{
+    // write code here
+  // wdnmd number为0没写 你报语法错误或者数组越界？
+  
+  // 斐波那契数列
+  if(number === 0) {
+    return 0
+  }
+  if(number === 1 || number === 2) {
+   return number
+  } else {
+    return rectCover(number - 1) + rectCover(number - 2)
+  }
+}
+```
+
+
+

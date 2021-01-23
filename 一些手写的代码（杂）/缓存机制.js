@@ -97,3 +97,31 @@ console.log(cache.get(4));       // 返回  4
 //   }
 //   return res
 // }
+
+
+// function isSymmetrical(pRoot)
+// {
+//     // write code here
+//   function tt(leftNode, rightNode) {
+//     if(leftNode ===null && rightNode === null) {
+//       return true
+//     }
+//     if(leftNode.val !== rightNode.val) {
+//       return false
+//     } else {
+//       return tt(leftNode.left, rightNode.right) && tt(leftNode.right, rightNode.left)
+//     }
+    
+    
+//   }
+//   tt(pRoot.left, pRoot.right)
+// }
+// function rectCover(number)
+// {
+//     // write code here
+//   if(number === 1 || number === 2) {
+//    return number
+//   } else {
+//     return rectCover(number - 1) + rectCover(number - 2)
+//   }
+// }
