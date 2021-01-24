@@ -780,3 +780,155 @@ function recursive (p, res) {
 }
 ```
 
+
+
+## 整数中1出现的次数
+
+求出1~13的整数中1出现的次数,并算出100~1300的整数中1出现的次数？为此他特别数了一下1~13中包含1的数字有1、10、11、12、13因此共出现6次,但是对于后面问题他就没辙了。ACMer希望你们帮帮他,并把问题更加普遍化,可以很快的求出任意非负整数区间中1出现的次数（从1 到 n 中1出现的次数）。
+
+
+
+```js
+function NumberOf1Between1AndN_Solution(n)
+{
+    // write code here
+  let resCount = 0
+  
+  // 对每个数都取余取整，比较每位上的是不是1
+  
+  for(let i = n; i >= 1; i--) {
+    let temp = i
+    while(temp !== 0) {
+      if(temp % 10 === 1 ) {
+        resCount++
+      }
+      temp = Math.floor( temp / 10)
+    }
+  }
+  return resCount
+}
+```
+
+
+
+
+
+## 两个链表的第一个公共节点
+
+输入两个链表，找出它们的第一个公共结点。（注意因为传入数据是链表，所以错误测试数据的提示是用其他方式显示的，保证传入数据是正确的）
+
+```js
+/*function ListNode(x){
+    this.val = x;
+    this.next = null;
+}*/
+function FindFirstCommonNode(p1, p2)
+{
+    // write code here
+  // 暴力比对 两层循环
+  if(!p1 || !p2) {
+    return null
+  }
+  
+  let tempArray = []
+  while(p1) {
+    tempArray.push(p1)
+    p1 = p1.next
+  }
+  
+  while(p2) {
+    for(let i = 0;i<tempArray.length; i++) {
+      if(p2.val === tempArray[i].val) {
+        return p2
+      }
+    }
+//     tempArray.forEach(obj => { // 不知道为啥这样写不行
+//       if(obj.val === p2.val) {
+//         return obj.val
+//       }
+//     })
+//     return p2
+    p2 = p2.next
+  }
+  return null
+}
+```
+
+
+
+
+
+## 数字在升序数组中出现的次数
+
+统计一个数字在升序数组中出现的次数。
+
+```js
+function GetNumberOfK(data, k)
+{
+  return data .indexOf(k) == -1 ? 0 : data.lastIndexOf(k) - data .indexOf(k) + 1  // 一行就行
+    // write code here
+//   let resCount = 0
+//   data.forEach(val => { // 1这样可行
+//     if(val == k) {
+//       resCount++
+//     }
+//   })
+  
+  // 也可以二分
+  
+//   return resCount
+  
+}
+```
+
+
+
+
+
+## 数组中只出现一次的数字
+
+一个整型数组里除了两个数字之外，其他的数字都出现了两次。请写程序找出这两个只出现一次的数字。
+
+
+
+```js
+function FindNumsAppearOnce(array)
+{
+  // write code here
+  // return list, 比如[a,b]，其中ab是出现一次的两个数字
+  // 第一种就是用两个下标查找的函数比较
+  
+//   let res = []
+//   array.forEach((val, index) => {
+//     if(array.indexOf(val) === array.lastIndexOf(val)) {
+//       res.push(val)
+//     }
+//   })
+//   return res
+  
+//   第二种遍历存到对象中，hash存 当已经有一个的时候，直接删了竖向多余2的属性，减少后面的遍历
+  let hash = {}
+  let res = []
+  
+  array.forEach(val => {
+    if(hash[val]){
+      delete hash[val]
+    }else {
+      hash[val] = 1
+    }
+  })
+  for(let key in hash) {
+      res.push(key)
+  }
+  
+  return res
+  // 第三种 用位运算  没看懂  算了
+  
+  
+}
+```
+
+
+
+
+

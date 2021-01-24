@@ -136,3 +136,30 @@ console.log(cache.get(4));       // 返回  4
 //   }
 // }
 
+
+/*function ListNode(x){
+    this.val = x;
+    this.next = null;
+}*/
+// function FindFirstCommonNode(p1, p2)
+// {
+//     // write code here
+//   if(!p1 || !p2) {
+//     return null
+//   }
+  
+//   let tempArray = []
+//   while(p1) {
+//     tempArray.push(p1)
+//     p1 = p1.next
+//   }
+//     while(p2) {
+//       tempArray.forEach(obj => {
+//         if(obj.val === p2.val) {
+//           return obj
+//         }
+//       })
+//       p2 = p2.next
+//     }
+//   return null
+// }
