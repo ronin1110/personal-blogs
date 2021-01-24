@@ -125,3 +125,14 @@ console.log(cache.get(4));       // 返回  4
 //     return rectCover(number - 1) + rectCover(number - 2)
 //   }
 // }
+
+// function Power(base, exponent)
+// {
+//     // write code here
+//   if(exponent == 0) {
+//     return 1
+//   } else {
+//     return Power(base, exponent - 1) * base
+//   }
+// }
+

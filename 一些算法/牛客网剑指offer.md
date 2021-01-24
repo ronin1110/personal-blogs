@@ -587,3 +587,196 @@ function rectCover(number)
 
 
 
+## 二进制中1的个数
+
+输入一个整数，输出该数32位二进制表示中1的个数。其中负数用补码表示。
+
+
+
+```js
+function NumberOf1(n)
+{
+    // write code here
+  // 每一位都进行比较 只有都是
+  let flag = 1
+  let count= 0
+  while(flag != 0) {
+    if((n & flag) != 0) {
+      count ++
+    }
+    flag <<= 1
+  }
+  return count
+  
+//   let count = 0
+//   while(n != 0) {
+//     count ++
+//     n = (n - 1) & n
+//   }
+//   return count
+  
+//   如果一个整数不为0，那么这个整数至少有一位是1。如果我们把这个整数减1，
+//   那么原来处在整数最右边的1就会变为0，原来在1后面的所有的0都会变成1(如
+//  果最右边的1后面还有0的话)。其余所有位将不会受到影响。
+
+
+// 举个例子：一个二进制数1100，从右边数起第三位是处于最右边的一个1。减去1后，第三位变成0，
+// 它后面的两位0变成了1，而前面的1保持不变，因此得到的结果是1011.
+// 我们发现减1的结果是把最右边的一个1开始的所有位都取反了。这个时候如果我们再把原来的整数和减去
+//   1之后的结果做与运算，从原来整数最右边一个1那一位开始所有位都会变成0。如1100&1011=100
+//   0.也就是说，把一个整数减去1，再和原整数做与运算，会把该整数最右边一个1变成0.那么一个整数的
+//   二进制有多少个1，就可以进行多少次这样的操作。
+}
+```
+
+
+
+
+
+## 数值的整次方
+
+给定一个double类型的浮点数base和int类型的整数exponent。求base的exponent次方。
+
+保证base和exponent不同时为0
+
+```js
+function Power(base, exponent)
+{
+//   return base**exponent; 调api
+    // write code here
+  
+  // 递归实现 分多种情况
+  if(base == 0) {
+    return 0
+  }
+  if(exponent == 0) {
+    return 1
+  } else {
+    if(exponent > 0) {
+      return Power(base, exponent - 1) * base
+    } else {
+      return (Power(base, exponent + 1) * (1/base))
+    }
+  }
+}
+```
+
+
+
+## 反转链表
+
+输入一个链表，反转链表后，输出新链表的表头。
+
+```js
+/*function ListNode(x){
+    this.val = x;
+    this.next = null;
+}*/
+function ReverseList(p)
+{
+//     write code here
+  let cur = null
+  let pre = p
+  let temp = null
+  while(pre) { // 交换指向
+    temp = pre.next
+    pre.next = cur
+    cur = pre
+    pre = temp
+  }
+  return cur
+}
+```
+
+
+
+## 栈的压入，弹出序列
+
+输入两个整数序列，第一个序列表示栈的压入顺序，请判断第二个序列是否可能为该栈的弹出顺序。假设压入栈的所有数字均不相等。例如序列1,2,3,4,5是某栈的压入顺序，序列4,5,3,2,1是该压栈序列对应的一个弹出序列，但4,3,5,1,2就不可能是该压栈序列的弹出序列。（注意：这两个序列的长度是相等的）
+
+
+
+```js
+function IsPopOrder(pushV, popV)
+{
+    // write code here
+  let stack = []
+
+  let j = 0
+  let i = 0
+  
+  // 用一个栈每次压入数据，并与出栈的顺序第一位比较，如果相等，pop()出来，出栈index后移，最后
+  for(i = 0; i < pushV.length; i++) {
+    stack.push(pushV[i])
+    while(stack.length > 0 && stack[stack.length-1] === popV[j]) {
+      stack.pop()
+      j++
+    }
+  }
+  return j >= popV.length
+}
+```
+
+
+
+## 二叉树搜索与双向链表
+
+
+
+输入一棵二叉搜索树，将该二叉搜索树转换成一个排序的双向链表。要求不能创建任何新的结点，只能调整树中结点指针的指向。
+
+
+
+```js
+/* function TreeNode(x) {
+    this.val = x;
+    this.left = null;
+    this.right = null;
+} */
+
+
+function Convert(p)
+{
+  // 把中序遍历记录在数组中，数组的顺序就是排序后的顺序，然后改变每一个节点的指针指向
+  let res = []
+  if(!p) {
+    return null
+  }
+    // write code here
+  recursive(p, res)
+  
+  for (let i = 0; i < res.length; i++) {
+    if(i == 0) {
+      res[i].left = null
+      res[i].right = res[1]
+    }
+    else if (i == res.length - 1) {
+      res[i].right = null
+      res[i].left = res[i-1]
+    } else {
+      res[i].right = res[i+1]
+      res[i].left = res[i-1]
+    }
+  }
+  // 由于res[0]的left和res[res.length-1]本身就是null，
+//   for(var i=0;i<res.length-1;i++){
+//     res[i].right=res[i+1];
+//     res[i+1].left=res[i];
+//   }
+  return res[0]
+}
+
+function recursive (p, res) {
+  if(!p) {
+    return null
+  }
+  recursive(p.left, res)
+  res.push(p)
+  recursive(p.right, res)
+  
+//   if(p.left){recursive(p.left,res);}
+//   res.push(p);
+//   if(p.right){recursive(p.right,res);}
+}
+```
+
