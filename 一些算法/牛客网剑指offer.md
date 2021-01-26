@@ -922,9 +922,331 @@ function FindNumsAppearOnce(array)
   }
   
   return res
+  
   // 第三种 用位运算  没看懂  算了
   
   
+}
+```
+
+
+
+
+
+
+
+## 和为s的连续正数序列
+
+小明很喜欢数学,有一天他在做数学作业时,要求计算出9~16的和,他马上就写出了正确答案是100。但是他并不满足于此,他在想究竟有多少种连续的正数序列的和为100(至少包括两个数)。没多久,他就得到另一组连续正数和为100的序列:18,19,20,21,22。现在把问题交给你,你能不能也很快的找出所有和为S的连续正数序列? Good Luck!
+
+
+
+```js
+function FindContinuousSequence(sum)
+{
+    // write code here
+  // 两层循环，完成左边界，内层右边界，累加和比较。
+  let res = []
+  for(let i = 1; i < sum / 2; i++) {
+    let tempRes = []
+//     let iter = i
+    let tempSum = 0
+    for(let iter = i; iter < sum; iter++) {
+      tempSum += iter
+      tempRes.push(iter)
+      
+      if(tempSum === sum) {
+        res.push(tempRes)
+        break
+      }
+    }
+    
+  }
+  return res
+  
+  
+  
+}
+```
+
+
+
+
+
+## 合为S的两个数字
+
+输入一个递增排序的数组和一个数字S，在数组中查找两个数，使得他们的和正好是S，如果有多对数字的和等于S，输出两个数的乘积最小的。
+
+```js
+function FindNumbersWithSum(array, sum)
+{
+    // write code here
+  // 双指针法 记录每次的状态变化，一般有序数组都用这个
+  let res = []
+  let product = sum * sum
+  
+  
+  let i = 0
+  let j = array.length - 1
+  
+  while(i < j) {
+    let tempSum = array[i] + array[j]
+    let tempProduct = array[i] * array[j]
+    if(tempSum === sum) {
+      if(tempProduct < product) {
+        product = tempProduct
+        res.push(array[i])
+        res.push(array[j])
+      }
+      i++
+    } else if(tempSum > sum){
+      j--
+    }else {
+      i++
+    }
+  }
+  return res
+}
+```
+
+## 左旋转字符串
+
+汇编语言中有一种移位指令叫做循环左移（ROL），现在有个简单的任务，就是用字符串模拟这个指令的运算结果。对于一个给定的字符序列S，请你把其循环左移K位后的序列输出。例如，字符序列S=”abcXYZdef”,要求输出循环左移3位后的结果，即“XYZdefabc”。是不是很简单？OK，搞定它！
+
+
+
+```js
+function LeftRotateString(str, n)
+{
+    // write code here\
+  if(!str) {
+    return ''
+  }
+  // 取余
+  let num = n % str.length
+  return str.substr(num) + str.substr(0, num)
+}
+```
+
+
+
+
+
+## 扑克牌顺子
+
+LL今天心情特别好,因为他去买了一副扑克牌,发现里面居然有2个大王,2个小王(一副牌原本是54张^_^)...他随机从中抽出了5张牌,想测测自己的手气,看看能不能抽到顺子,如果抽到的话,他决定去买体育彩票,嘿嘿！！“红心A,黑桃3,小王,大王,方片5”,“Oh My God!”不是顺子.....LL不高兴了,他想了想,决定大\小 王可以看成任何数字,并且A看作1,J为11,Q为12,K为13。上面的5张牌就可以变成“1,2,3,4,5”(大小王分别看作2和4),“So Lucky!”。LL决定去买体育彩票啦。 现在,要求你使用这幅牌模拟上面的过程,然后告诉我们LL的运气如何， 如果牌能组成顺子就输出true，否则就输出false。为了方便起见,你可以认为大小王是0。
+
+```js
+function IsContinuous(numbers)
+{
+    // write code here
+  
+  // 我们分两种情况考虑，
+// 一. 如果vector中不包含0的情况：
+// 那么如何判断呢？因为需要是顺子，所以首先不能有重复值， 如果没有重复值，那么形如[1 2 3 4 5]
+// [5 6 7 8 9]， 会发现最大值与最小值的差值应该小于5.
+
+// 二. 如果vector中包含0：
+// 发现除去0后的值，判断方法和1中是一样的。
+  if(numbers.length === 0) {
+    return false
+  }
+  let hash = {}
+  let max = 0
+  let min = 14
+    for(let i = 0; i<numbers.length; i++)  {
+     let val = numbers[i]
+    if(val > 0) {
+      if(hash[val]) {
+        return false
+      } else {
+        hash[val] = true
+      }
+      max = max > val ? max : val
+      min = min < val ? min : val
+    }
+  }
+  return max - min < 5
+//   return hash
+}
+```
+
+
+
+## 孩子们的游戏
+
+每年六一儿童节,牛客都会准备一些小礼物去看望孤儿院的小朋友,今年亦是如此。HF作为牛客的资深元老,自然也准备了一些小游戏。其中,有个游戏是这样的:首先,让小朋友们围成一个大圈。然后,他随机指定一个数m,让编号为0的小朋友开始报数。每次喊到m-1的那个小朋友要出列唱首歌,然后可以在礼品箱中任意的挑选礼物,并且不再回到圈中,从他的下一个小朋友开始,继续0...m-1报数....这样下去....直到剩下最后一个小朋友,可以不用表演,并且拿到牛客名贵的“名侦探柯南”典藏版(名额有限哦!!^_^)。请你试着想下,哪个小朋友会得到这份礼品呢？(注：小朋友的编号是从0到n-1)
+
+
+
+```js
+function LastRemaining_Solution(n, m)
+{
+  // write code here
+//   f(n, m) = (m % n + x) % n = (m + x) % n。
+  if(n <= 0) {
+    return -1
+  }
+  let index = 0
+  for(let i = 2; i <= n; i++) {
+    index = (index + m) % i
+  }
+  
+  return index
+}
+```
+
+
+
+
+
+### 累加
+
+求1+2+3+...+n，要求不能使用乘除法、for、while、if、else、switch、case等关键字及条件判断语句（A?B:C）。
+
+
+
+```js
+function Sum_Solution(n)
+{
+    // write code here
+  // 递归累加
+  return n === 1 ? 1:Sum_Solution(n-1) +n
+}
+```
+
+
+
+
+
+## 数组中重复复的数字
+
+在一个长度为n的数组里的所有数字都在0到n-1的范围内。 数组中某些数字是重复的，但不知道有几个数字是重复的。也不知道每个数字重复几次。请找出数组中第一个重复的数字。 例如，如果输入长度为7的数组{2,3,1,0,2,5,3}，那么对应的输出是第一个重复的数字2。
+
+返回描述：
+
+如果数组中有重复的数字，函数返回true，否则返回false。
+
+如果数组中有重复的数字，把重复的数字放到参数duplication[0]中。（ps:duplication已经初始化，可以直接赋值使用。）
+
+
+
+```js
+function duplicate(numbers, duplication)
+{
+    // write code here
+    //这里要特别注意~找到任意重复的一个值并赋值到duplication[0]
+    //函数返回True/False
+  let hash = {}
+   for(let i =0; i<numbers.length; i++){
+     var val = numbers[i]
+     if(hash[val]) {
+       duplication[0] = val
+       return val
+     } else {
+       hash[val] = val
+     }
+  }
+  return false
+  
+//   for (let i = 0; i < numbers.length; i++) {
+//         if (numbers.lastIndexOf(numbers[i]) !== i) {
+//             duplication[0] = numbers[i]
+//             return true
+//         }
+//     }
+//     return false
+}
+```
+
+
+
+## 表示数值的字符串
+
+请实现一个函数用来判断字符串是否表示数值（包括整数和小数）。例如，字符串"+100","5e2","-123","3.1416"和"-1E-16"都表示数值。 但是"12e","1a3.14","1.2.3","+-5"和"12e+4.3"都不是。
+
+
+
+```js
+//s字符串
+function isNumeric(s)
+{
+    // write code here
+//   正则
+    var reg = /^[\+-]?\d*\.?\d+(e[\+-]?\d+)?$/i;
+    return reg.test(s);
+}
+```
+
+
+
+
+
+## 字符流中第一个不重复的字符
+
+请实现一个函数用来找出字符流中第一个只出现一次的字符。例如，当从字符流中只读出前两个字符"go"时，第一个只出现一次的字符是"g"。当从该字符流中读出前六个字符“google"时，第一个只出现一次的字符是"l"。
+
+```js
+//Init module if you need
+let map ={}
+function Init()
+{
+    // write code here
+  map = {}
+}
+//Insert one char from stringstream
+function Insert(ch)
+{
+    // write code here
+  // 每次传入一个字符串存进hash
+  if(map[ch]){
+        map[ch] = map[ch]+1;
+    } else{
+        map[ch]=1;
+    }
+}
+//return the first appearence once char in current stringstream
+function FirstAppearingOnce()
+{
+    // write code here
+  // 比较计数返回
+  for(let i in map){
+    if(map[i]==1) {
+      return i
+    };
+  }
+    return "#";
+}
+```
+
+
+
+
+
+## 链表中环的入口节点
+
+给一个链表，若其中包含环，请找出该链表的环的入口结点，否则，输出null。
+
+```js
+/*function ListNode(x){
+    this.val = x;
+    this.next = null;
+}*/
+
+function EntryNodeOfLoop(p)
+{
+  // 存hash 看节点是否存在 如果存在相同的数据，就直接返回那个节点，如果没有 已val做key值存整个节点
+  let hash = {}
+  while(p) {
+    if(hash[p.val] === p) {
+      return p
+    } else {
+      hash[p.val] = p
+      p = p.next
+    }
+  }
+  return null
+    // write code here
 }
 ```
 

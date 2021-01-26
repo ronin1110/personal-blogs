@@ -163,3 +163,29 @@ console.log(cache.get(4));       // 返回  4
 //     }
 //   return null
 // }
+
+// function LeftRotateString(str, n)
+// {
+//     // write code here
+//   return str.slice(n) + str.slice(0, n)
+// }
+
+// function IsContinuous(numbers)
+// {
+//     // write code here
+//   let hash = {}
+//   let max = 0
+//   let min = 14
+//   numbers.forEach(val => {
+//     if(val > 0) {
+//       if(hash.val) {
+//         return false
+//       } else {
+//         hash.val = 1
+//       }
+//       max = Math.max( max, val)
+//       min = Math.min( min, val)
+//     }
+//   })
+//   return max - min < 5
+// }
