@@ -1252,5 +1252,557 @@ function EntryNodeOfLoop(p)
 
 
 
+## 二叉树的下一个节点
+
+给定一个二叉树和其中的一个结点，请找出中序遍历顺序的下一个结点并且返回。注意，树中的结点不仅包含左右子结点，同时包含指向父结点的指针。
 
 
+
+![图片说明](https://uploadfiles.nowcoder.com/images/20200526/284295_1590477193692_99D648423BB3F2113395149399A1462A)
+
+[1] 是一类：特点：当前结点是父亲结点的左孩子
+[2 3 6] 是一类，特点：当前结点右孩子结点，那么下一节点就是：右孩子结点的最左孩子结点,如果右孩子结点没有左孩子就是自己
+[4 5]是一类，特点：当前结点为父亲结点的右孩子结点，本质还是[1]那一类
+[7]是一类，特点：最尾结点
+
+
+
+
+
+```js
+/*function TreeLinkNode(x){
+    this.val = x;
+    this.left = null;
+    this.right = null;
+    this.next = null;
+}*/
+function GetNext(p)
+{
+    // write code here
+  if(p == null) {
+    return null
+  }
+  // 属于[2 3 6]类
+  if(p.right) {
+    p = p.right
+    while(p.left) {
+      p = p.left
+    }
+    return p
+  }
+  // 属于 [1] 和 [4 5]
+  while(p.next) {
+    let par = p.next
+    if(par.left == p) {
+      return par
+    }
+    p = p.next
+  }
+  // 属于[7]
+  return null
+  
+}
+```
+
+
+
+
+
+## 二叉树打印多行
+
+从上到下按层打印二叉树，同一层结点从左至右输出。每一层输出一行。
+
+
+
+```js
+/* function TreeNode(x) {
+    this.val = x;
+    this.left = null;
+    this.right = null;
+} */
+// 用队列实现广度优先搜索 套模板！！
+function Print(root)
+{
+  if(root == null) {
+    return []
+  }
+  
+  let res = []
+  
+  let queue = []
+  queue.push(root)
+  while(queue.length) {
+    let len = queue.length // 因为循环的内部queue的长度在变 所以变量存
+    let tempRes = []
+    for(let i = 0; i< len; i++) {
+      let temp = queue.shift()
+      tempRes.push(temp.val)
+      
+      if(temp.left) {
+        queue.push(temp.left)
+      }
+      if(temp.right) {
+        queue.push(temp.right)
+      }
+    }
+    res.push(tempRes)
+  }
+  
+  return res
+    // write code here
+}
+```
+
+
+
+
+
+## 数据流中的中位数
+
+如何得到一个数据流中的中位数？如果从数据流中读出奇数个数值，那么中位数就是所有数值排序之后位于中间的数值。如果从数据流中读出偶数个数值，那么中位数就是所有数值排序之后中间两个数的平均值。我们使用Insert()方法读取数据流，使用GetMedian()方法获取当前读取数据的中位数。
+
+
+
+```js
+let res = []
+function Insert(num)
+{
+    // write code here
+  // 每次读入都存入数组
+  res.push(num)
+  res = res.sort()
+}
+function GetMedian(){
+	// write code here
+  // 依据数组的长度奇偶 返回中位数
+  return res.length % 2 === 0 ? (res[res.length / 2 - 1] + res[res.length / 2])/2 : res[Math.floor(res.length / 2)]
+}
+```
+
+
+
+
+
+## 剪绳子
+
+给你一根长度为n的绳子，请把绳子剪成整数长的m段（m、n都是整数，n>1并且m>1，m<=n），每段绳子的长度记为k[1],...,k[m]。请问k[1]x...xk[m]可能的最大乘积是多少？例如，当绳子的长度是8时，我们把它剪成长度分别为2、3、3的三段，此时得到的最大乘积是18。
+
+
+
+```js
+function cutRope(number)
+{
+    if(number==2){
+        return 1
+    }
+    if(number==3){
+        return 2
+    }
+    var dp = [];
+    dp[2] = 2;
+    dp[3] = 3;
+    for(let i=4; i<number+1; i++){
+        let max = 0;
+        for(let j = 2; j<=number/2; j++){
+            max = Math.max(max, dp[j]*dp[i-j]) // 动态规划 dp[i] 记录长为i的最优解（乘积最大）
+        }
+        dp[i] = max;
+    }
+    return dp[number]
+
+```
+
+
+
+
+
+## 替换空格
+
+请实现一个函数，将一个字符串中的每个空格替换成“%20”。例如，当字符串为We Are Happy.则经过替换之后的字符串为We%20Are%20Happy。
+
+
+
+```js
+function replaceSpace(str)
+{
+    // write code here
+  if(str.includes(' ')) {
+    return replaceSpace(str.replace(' ', '%20')) // replace 会改变第一个匹配到的字符串  // 否则则用正则去匹配
+  } else {
+    return str
+  }
+}
+```
+
+
+
+
+
+## 从尾到头打印空格
+
+输入一个链表，按链表从尾到头的顺序返回一个ArrayList。
+
+```js
+/*function ListNode(x){
+    this.val = x;
+    this.next = null;
+}*/
+function printListFromTailToHead(head)
+{
+    // write code here
+  let res = []
+  while(head) {
+    res.unshift(head.val)
+    head = head.next
+  }
+  
+  return res
+}
+```
+
+
+
+
+
+## 调整数组的顺序奇数在前偶数在后
+
+输入一个整数数组，实现一个函数来调整该数组中数字的顺序，使得所有的奇数位于数组的前半部分，所有的偶数位于数组的后半部分，并保证奇数和奇数，偶数和偶数之间的相对位置不变。
+
+
+
+```js
+function reOrderArray(array)
+{
+  
+    // write code here
+  // 用辅助变量来做很简单
+  let resA = []
+  let resB = []
+  array.forEach(val=>{
+    if(val % 2 ==1) {
+      resA.push(val)
+    } else {
+      resB.push(val)
+    }
+  })
+  return resA.concat(resB)
+}
+```
+
+
+
+
+
+## 链表中倒数第K个节点
+
+输入一个链表，输出该链表中倒数第k个结点。
+
+```js
+/*function ListNode(x){
+    this.val = x;
+    this.next = null;
+}*/
+function FindKthToTail(head, k)
+{
+    // write code here
+  if(!head) {
+    return null
+  }
+  
+  let res = null
+  res = head
+  
+  // 两个指针相隔k个节点
+  while(k--) {
+//     res = head
+    if(!head) {
+      return null
+    }else {
+      head = head.next
+    }
+  }
+
+  while(head) {
+    head = head.next
+    res = res.next
+  }
+  
+  return res
+}
+```
+
+
+
+
+
+## 树的子结构
+
+输入两棵二叉树A，B，判断B是不是A的子结构。（ps：我们约定空树不是任意一个树的子结构）
+
+```js
+/* function TreeNode(x) {
+    this.val = x;
+    this.left = null;
+    this.right = null;
+} */
+function HasSubtree(pRoot1, pRoot2)
+{
+    // write code here
+  if(!pRoot1 || !pRoot2) {
+    return false
+  }else {
+    // 三颗树，分别判断
+    return dfs(pRoot1, pRoot2) || dfs(pRoot1.left, pRoot2) || dfs(pRoot1.right, pRoot2)
+  }
+
+  
+}
+
+// 遍历判断两棵树是否相等 
+// 根据题意可知，需要一个函数判断树A和树B是否有相同的结构。显然是个递归程序。可考察递归程序3部曲。
+// 1.递归函数的功能：判断2个数是否有相同的结构，如果相同，返回true，否则返回false
+// 2.递归终止条件：
+// 如果树B为空，返回true，此时，不管树A是否为空，都为true
+// 否则，如果树B不为空，但是树A为空，返回false，此时B还没空但A空了，显然false
+// 3.下一步递归参数：
+// 如果A的根节点和B的根节点不相等，直接返回false
+
+function dfs(p1, p2) {
+  if(!p2) {
+    return true
+  }
+  if(!p1) {
+    return false
+  }
+  return p1.val === p2.val && dfs(p1.left, p2.left) && dfs(p1.right, p2.right)
+}
+```
+
+
+
+
+
+
+
+## 顺时针打印矩阵
+
+输入一个矩阵，按照从外向里以顺时针的顺序依次打印出每一个数字，例如，如果输入如下4 X 4矩阵： 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 则依次打印出数字1,2,3,4,8,12,16,15,14,13,9,5,6,7,11,10.
+
+```js
+function printMatrix(matrix)
+{
+  
+  // 旋转打印 用4个变量记录位置 每次变化都判断是否越过
+    // write code here
+  if(!matrix) {
+    return []
+  }
+  
+  let res = []
+  
+  let left = 0
+  let right = matrix[0].length-1
+  let top = 0
+  let bottom = matrix.length-1
+  
+  while(left <= right && top <= bottom) {
+    for(let i = left; i<= right; i++) {
+      res.push(matrix[top][i])
+    }
+    top++
+    for(let i = top; i<= bottom; i++) {
+      res.push(matrix[i][right])
+    }
+    right--
+    
+    if(top > bottom || left > right) break
+    
+    for(let i = right; i>= left; i--) {
+      res.push(matrix[bottom][i])
+    }
+    bottom--
+    for(let i = bottom; i>= top; i--) {
+      res.push(matrix[i][left])
+    }
+    left++
+  }
+  return res
+
+  
+}
+```
+
+
+
+## 包含min函数的栈
+
+定义栈的数据结构，请在该类型中实现一个能够得到栈中所含最小元素的min函数（时间复杂度应为O（1））
+
+```js
+let stack = []
+let min_val = Number.MAX_VALUE
+function push(node)
+{
+    // write code here
+  stack.push(node)
+  if(node < min_val) {
+    min_val = node
+  }
+}
+function pop()
+{
+    // write code here
+  let node = stack.pop()
+  if(node === min_val) {
+    let m = Number.MAX_VALUE
+    stack.forEach(val => {
+      if(val < m) {
+        m = val
+      }
+    })
+    min_val = m
+  }
+  
+}
+function top()
+{
+  return stack[stack.length-1]
+    // write code here
+}
+function min()
+{
+  return min_val
+    // write code here
+}
+```
+
+
+
+
+
+## 二叉搜索树后序遍历序列
+
+输入一个整数数组，判断该数组是不是某二叉搜索树的后序遍历的结果。如果是则返回true,否则返回false。假设输入的数组的任意两个数字都互不相同。
+
+```js
+function VerifySquenceOfBST(sequence)
+{
+  由题意可得：
+
+// 1. 后序遍历序列的最后一个元素为二叉树的根节点；
+
+// 2. 二叉搜索树左子树上所有的结点均小于根结点、右子树所有的结点均大于根结点。
+
+
+// 算法步骤如下：
+
+// 1. 找到根结点；
+
+// 2. 遍历序列，找到第一个大于等于根结点的元素i，则i左侧为左子树、i右侧为右子树；
+
+// 3.
+// 我们已经知道i左侧所有元素均小于根结点，那么再依次遍历右侧，看是否所有元素均大于根结点；若出现小于根结点的元素，则直接返回false；若右侧全都大于根结点，则：
+
+// 4. 分别递归判断左/右子序列是否为后序序列；
+  if(sequence.length == 0) {
+    return false
+  }
+    // write code here
+  return judge(sequence, 0 , sequence.length-1)
+}
+function judge(arr, start, end) {
+  if(start >= end) {
+    return true
+  }
+  let i = start
+  while(arr[end] > arr[i]) {
+    i++
+  }
+  for(let j = i; j< end; j++) {
+    if(arr[j]< arr[end]) {
+      return false
+    }
+  }
+  
+  return judge(arr, start, i-1) && judge(arr, i, end-1)
+  
+}
+```
+
+
+
+## 二叉树中和为某一值的路径
+
+输入一颗二叉树的根节点和一个整数，按字典序打印出二叉树中结点值的和为输入整数的所有路径。路径定义为从树的根结点开始往下一直到叶结点所经过的结点形成一条路径。、
+
+```js
+/* function TreeNode(x) {
+    this.val = x;
+    this.left = null;
+    this.right = null;
+} */
+
+function FindPath(root, expectNumber)
+{  
+  // write code here
+  let res=[]
+  let tempRes = []
+  dfs(root, expectNumber)
+  return res
+  
+  function dfs(root, number) { // 深度递归
+    if(!root) {
+     return  
+    }
+    tempRes.push(root.val) // 路径添加进去
+    
+    number = number - root.val // 消耗的值
+    
+    if(!root.left && !root.right && number == 0) { // 和为目标值 路劲添加进结果
+      res.push(tempRes.concat())
+    }
+    
+    dfs(root.left, number) // 左右子树
+    dfs(root.right, number)
+    tempRes.pop() // 路径吐出
+  }
+ 
+
+}
+
+
+```
+
+
+
+
+
+## 复杂链表的复制
+
+输入一个复杂链表（每个节点中有节点值，以及两个指针，一个指向下一个节点，另一个特殊指针random指向一个随机节点），请对此链表进行深拷贝，并返回拷贝后的头结点。（注意，输出结果中请不要返回参数中的节点引用，否则判题程序会直接返回空）
+
+```js
+/*function RandomListNode(x){
+    this.label = x;
+    this.next = null;
+    this.random = null;
+}*/
+function Clone(node)
+{
+    // write code here
+  if(!node) {
+    return null
+  } else {
+    let res = new RandomListNode(node.label)
+    res.random = node.random
+    res.next = Clone(node.next)
+    return res  
+  }
+}
+```
+
+
+
+
+
+、

@@ -189,3 +189,20 @@ console.log(cache.get(4));       // 返回  4
 //   })
 //   return max - min < 5
 // }
+
+// function cutRope(number)
+// {
+//   // write code here
+//   return back_track(number)
+// }
+
+// function back_track(n) {
+//   if(n <= 4) {
+//     return n
+//   }
+//   let max = 0
+//   for(let i =0; i< n; i++){
+//     max = Math.max(max, i * back_track(n-1))
+//   }
+//   return max
+// }
