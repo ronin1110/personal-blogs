@@ -1805,4 +1805,403 @@ function Clone(node)
 
 
 
-、
+## 字符串全排列！！！！
+
+输入一个字符串,按字典序打印出该字符串中字符的所有排列。例如输入字符串abc,则按字典序打印出由字符a,b,c所能排列出来的所有字符串abc,acb,bac,bca,cab和cba。
+
+```js
+function Permutation(str)
+{
+    // write code here
+  if(str.length === 0) {
+    return []
+  }
+  let res = []
+  strArrange(res, '', str)
+  return res
+}
+
+function strArrange(res, s, str) {
+  if(str.length === 0) {
+    res.push(s)
+  }
+  for(let i =0; i<str.length; i++) {
+    if(i>0 && str[i] === str[i-1]) {
+      continue
+    }
+    let left = str.slice(0, i)
+    let right = str.slice(i+1)
+    strArrange(res, s+str[i], left+right)
+  }
+}
+```
+
+
+
+
+
+## 最小的K个数
+
+输入n个整数，找出其中最小的K个数。例如输入4,5,1,6,2,7,3,8这8个数字，则最小的4个数字是1,2,3,4。
+
+```js
+function GetLeastNumbers_Solution(input, k)
+{
+    // write code here
+  if(input.length < k) {
+    return []
+  }
+  let res = input.sort()
+  res = res.slice(0,k)
+  return res
+}
+```
+
+
+
+
+
+## 数组排成最小的数
+
+输入一个正整数数组，把数组里所有数字拼接起来排成一个数，打印能拼接出的所有数字中最小的一个。例如输入数组{3，32，321}，则打印出这三个数字能排成的最小数字为321323。
+
+```js
+function PrintMinNumber(numbers)
+{
+    // write code here
+  //  * 先将整型数组转换成String数组，然后将String数组排序，最后将排好序的字符串数组拼接出来。关键就是制定排序规则。
+//   排序规则如下：
+//   若ab > ba 则 a > b，
+//   若ab < ba 则 a < b，
+//   若ab = ba 则 a = b；
+//   解释说明：
+//   比如 "3" < "31"但是 "331" > "313"，所以要将二者拼接起来进行比较
+  if(numbers === null || numbers.length<=0) {
+    return ''
+  }
+  let res = ''
+  let temp = 0
+  for(let i =0; i<numbers.length; i++) {
+    for(let j = i+1; j<numbers.length; j++) {
+      if(numbers[i] + '' + numbers[j] > numbers[j] + '' + numbers[i]) {
+        temp = numbers[i]
+        numbers[i] = numbers[j]
+        numbers[j] = temp
+      }
+    }
+    res += numbers[i]
+  }
+  return res
+}
+```
+
+
+
+
+
+## 丑数
+
+把只包含质因子2、3和5的数称作丑数（Ugly Number）。例如6、8都是丑数，但14不是，因为它包含质因子7。 习惯上我们把1当做是第一个丑数。求按从小到大的顺序的第N个丑数。
+
+```js
+function GetUglyNumber_Solution(index)
+{
+//   丑数是任意个2,3,5相乘得到的。
+// 每个丑数都可以乘以一个2,3,5得到一个新的丑数。
+// 根绝这个思想，我们可以递推出所有的丑数。
+// 首先定义一个数组存储所有的丑数，并从头开始扫描所有丑数，每个丑数都乘以2,3,5，得到新的丑数。所以设三个指针分别表示接拿下来轮到那个数乘2,乘3,乘5。
+// 进行n次，即可得到第n个丑数。
+  if(index===0) {
+    return 0
+  }
+    // write code here
+  let res = []
+  res[0] = 1
+  let i=0,j=0,k = 0
+  for(let m = 0; m<index; m++) {
+    let r1 = res[i] * 2
+    let r2 = res[j] * 3
+    let r3 = res[k] * 5
+    let min = Math.min(r1,Math.min(r2, r3))
+    res.push(min)
+    if(min === r1) {
+      i++
+    }
+    if(min === r2) {
+      j++
+    }
+    if(min === r3) {
+      k++
+    }
+  }
+  return res[index-1]
+}
+```
+
+
+
+
+
+## 翻转单词顺序
+
+牛客最近来了一个新员工Fish，每天早晨总是会拿着一本英文杂志，写些句子在本子上。同事Cat对Fish写的内容颇感兴趣，有一天他向Fish借来翻看，但却读不懂它的意思。例如，“student. a am I”。后来才意识到，这家伙原来把句子单词的顺序翻转了，正确的句子应该是“I am a student.”。Cat对一一的翻转这些单词顺序可不在行，你能帮助他么？
+
+```js
+function ReverseSentence(str)
+{
+  let res = str.split(' ').reverse()
+  return res.join(" ")
+}
+```
+
+
+
+
+
+## 字符串转换成整数
+
+将一个字符串转换成一个整数，要求不能使用字符串转换整数的库函数。 数值为0或者字符串不是一个合法的数值则返回0
+
+```js
+function StrToInt(str)
+{
+    // write code here
+  let arr= str.split('')
+  let nums = ['1','2','3','4','5','6','7','8','9']
+  // 处理第一个字符 既不是正负也不是数字的时候返回0
+  if( (!['+', '-'].includes(arr[0])) && !nums.includes(arr[0])) {
+    return 0
+  }
+//   遍历后面的字符 ,如果不是数字,直接返回0
+  for(let i = 1; i<arr.length; i++) {
+    if(!nums.includes(arr[i])) {
+      return 0
+    }
+  }
+    let n1 = Number(str.slice(1))
+//     后面的数字为0就直接返回0
+    if(n1 === 0) {
+      return 0
+    }
+//    当第一个字符为+的时候 直接返回后面的数字，如果不是，需要返回第一个符号
+    return arr[0] === '+' ? n1 : arr[0] + n1
+}
+```
+
+
+
+
+
+## 正则表达式
+
+请实现一个函数用来匹配包括'.'和'*'的正则表达式。模式中的字符'.'表示任意一个字符，而'*'表示它前面的字符可以出现任意次（包含0次）。 在本题中，匹配是指字符串的所有字符匹配整个模式。例如，字符串"aaa"与模式"a.a"和"ab*ac*a"匹配，但是与"aa.a"和"ab*a"均不匹配
+
+```js
+//s, pattern都是字符串
+function match(str, pattern)
+{
+    // write code here
+  if(str == null || pattern == null) {
+    return false
+  }
+  let s = 0
+  let p =0
+  return matchCore(str,pattern,s ,p)
+}
+
+function matchCore(str, pattern , s, p) {
+  if(p === pattern.length) {
+    return s === str.length
+  }
+  if(p+1<pattern.length && pattern[p+1] == '*') {
+    if(s!=str.length && (pattern[p] === str[s] || pattern[p] == '.')) {
+      return matchCore(str, pattern, s+1, p) || // 匹配多个
+             matchCore(str, pattern, s, p+2) ||// 匹配0个
+             matchCore(str, pattern, s+1, p+2)// 匹配1个
+    } else { //str遍历结束或者不相等
+      return matchCore(str, pattern, s, p+2)
+    }
+  }
+  //如果后面不是*,或者pattern遍历到最后一个了
+  if(s!=str.length && (str[s] === pattern[p] || pattern[p] == '.')) {
+    return matchCore(str, pattern, s+1,p+1)
+  }
+  return false
+}
+```
+
+
+
+
+
+## 删除链表中的重复的点
+
+在一个排序的链表中，存在重复的结点，请删除该链表中重复的结点，重复的结点不保留，返回链表头指针。 例如，链表1->2->3->3->4->4->5 处理后为 1->2->5
+
+```js
+/*function ListNode(x){
+    this.val = x;
+    this.next = null;
+}*/
+function deleteDuplication(p)
+{
+    // write code here
+//   let hash = []
+  
+  let newHead = new ListNode(-1)  //新建一个节点，防止头结点要被删除
+  newHead.next = p
+  
+  let pre = newHead
+  
+  while(p) {
+    let next = p.next
+    if(next && p.val === next.val) {  //新建一个节点，防止头结点要被删除
+      while(next && p.val === next.val) { //向后重复查找
+        next = next.next 
+      }
+      pre.next = next //指针赋值，就相当于删除
+      p = next
+    } else { //如果当前节点和下一个节点值不等，则向后移动一位
+      pre = p
+      p = p.next
+    }
+  }
+  return newHead.next //返回头结点的下一个节点
+//   return head
+}
+```
+
+
+
+
+
+## 按之字顺序打印二叉树
+
+请实现一个函数按照之字形打印二叉树，即第一行按照从左到右的顺序打印，第二层按照从右至左的顺序打印，第三行按照从左到右的顺序打印，其他行以此类推。
+
+```js
+/* function TreeNode(x) {
+    this.val = x;
+    this.left = null;
+    this.right = null;
+} */
+//广度优先
+function Print(pRoot)
+{
+  let lists = [];
+  if(pRoot == null){
+    return lists;
+  }
+  let stack1 = [];
+  let stack2 = [];
+  stack2.push(pRoot);
+  let flag = true;
+  while(stack1.length != 0|| stack2.length !=0){
+    let list =  [];
+    if(flag){//为奇数层
+      while(stack2.length !=0){
+        let tmp = stack2.pop();
+        list.push(tmp.val);
+        if (tmp.left !== null) stack1.push(tmp.left);
+        if (tmp.right !== null) stack1.push(tmp.right);
+      }
+    }else{
+      while(stack1.length != 0){
+        let tmp = stack1.pop();
+        list.push(tmp.val);
+        if (tmp.right !== null) stack2.push(tmp.right);
+        if (tmp.left !== null) stack2.push(tmp.left);
+      }
+    }
+    lists.push(list);
+    flag = !flag;
+  }
+  return lists;
+}
+
+```
+
+
+
+
+
+## 序列化二叉树
+
+二叉树的序列化是指：把一棵二叉树按照某种遍历方式的结果以某种格式保存为字符串，从而使得内存中建立起来的二叉树可以持久保存。序列化可以基于先序、中序、后序、层序的二叉树遍历方式来进行修改，序列化的结果是一个字符串，序列化时通过 某种符号表示空节点（#），以 ！ 表示一个结点值的结束（value!）。
+
+二叉树的反序列化是指：根据某种遍历顺序得到的序列化字符串结果str，重构二叉树。
+
+
+
+例如，我们可以把一个只有根节点为1的二叉树序列化为"1,"，然后通过自己的函数来解析回这个二叉树
+
+```js
+/* function TreeNode(x) {
+    this.val = x;
+    this.left = null;
+    this.right = null;
+} */
+let arr =[]
+function Serialize(pRoot)
+{
+    // write code here
+  if(pRoot === null) {
+    arr.push('#')
+  } else {
+    arr.push(pRoot.val)
+    Serialize(pRoot.left)
+    Serialize(pRoot.right)
+  }
+}
+function Deserialize(s)
+{
+  let node = null
+  if(arr.length<1) {
+    return null
+  }
+  let number = arr.shift()
+  if(typeof number == 'number') {
+    node = new TreeNode(number)
+    node.left = Deserialize(arr)
+    node.right = Deserialize(arr)
+  }
+  return node
+    // write code here
+}
+```
+
+
+
+
+
+## 滑动窗口最大值
+
+给定一个数组和滑动窗口的大小，找出所有滑动窗口里数值的最大值。例如，如果输入数组{2,3,4,2,6,2,5,1}及滑动窗口的大小3，那么一共存在6个滑动窗口，他们的最大值分别为{4,4,6,6,6,5}； 针对数组{2,3,4,2,6,2,5,1}的滑动窗口有以下6个： {[2,3,4],2,6,2,5,1}， {2,[3,4,2],6,2,5,1}， {2,3,[4,2,6],2,5,1}， {2,3,4,[2,6,2],5,1}， {2,3,4,2,[6,2,5],1}， {2,3,4,2,6,[2,5,1]}。
+
+窗口大于数组长度的时候，返回空
+
+```js
+function maxInWindows(num, size)
+{
+    // write code here
+  // 暴力比对
+  if(size > num.lengtth) {
+    return null
+  }
+  if(size === 0) {
+    return []
+  }
+  let res = []
+  for(let i = 0; i<num.length-size+1; i++) {
+//     let max = Number.MIN_VALUE
+    let temp = num.slice(i, i+size)
+    let max = Math.max(...temp)
+//     for(let ii= i; ii<i+size;ii++){
+//         max = num[ii]>max ? num[ii] : max
+//     }
+   res.push(max)
+  }
+  return res
+}
+```
+
