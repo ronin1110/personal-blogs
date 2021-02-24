@@ -82,3 +82,81 @@ function myNew(constructor, ...args) {
   let res = constructor.call(obj, ...args)
   return typeof(res) === 'object' ? res : obj
 }
+
+// 手写Promise
+function myPromise(executor) {
+  let self = this
+  this.status = 'pending'
+  let resolveCallbacks = []
+  let rejectCallbacks = []
+
+  function resolve(value) {
+    if(self.status === 'pending') {
+      // console.log(this, 'resolve')
+      self.value = value
+      self.status = 'resolved'
+      resolveCallbacks.forEach((fn) => {
+        fn(value)
+      })
+    }
+  }
+  
+  function reject(reason) {
+    if(self.status === 'pending') {
+      // console.log(this, 'reject')
+      self.value = reason
+      self.status = 'rejected'
+      rejectCallbacks.forEach((fn) => {
+        fn(value)
+      })
+    }
+  }
+
+  executor(resolve, reject)
+}
+
+myPromise.prototype.then = function(onFulfilled, onRejected) {
+  let self = this
+  if(self.status === 'pending') {
+    self.resolveCallbacks.push(onFulfilled)
+    self.rejectCallbacks.push(onRejected)
+  }
+  if(self.status === 'resolved') {
+    onFulfilled(self.value)
+  }
+  if(self.status === 'rejected') {
+    onRejected(self.value)
+  }
+}
+
+// 数组去重
+let arr = [1,2,3,45,56,77,77,8,7,7,3]
+// let newArr1 = [...new Set(arr)]
+
+// let newArr2 = []
+// arr.forEach((item, index) => {
+//   if(arr.indexOf(item) === index) {
+//     newArr2.push(item)
+//   }
+// })
+// let newArr4 = []
+// arr = arr.sort()
+// for(let index = i; index<arr.length; index++) {
+//   if(arr[index] !== arr[index - 1]) {
+//     newArr4.push[arr[index]]
+//   }
+// }
+
+// 实现sleep
+function sleep(time) {
+  return new Promise((resolve, reject) => {
+    setTimeout( function() {
+      resolve(time)
+    }, sleep)
+  }) 
+}
+sleep().then(time => {
+ console.log(time)
+}
+  
+)

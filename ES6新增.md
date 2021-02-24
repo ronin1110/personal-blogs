@@ -317,7 +317,7 @@ console.log(arr.includes(5)); // false
 #### includes(), startsWith(), endsWith()
 
 - includes(str, [position])   返回布尔值，表示是否找到了参数字符串
-- `startsWidth(str, [position])`         返回布尔值，表示参数字符串是否在原字符串的头部或指定位置
+- `startsWith(str, [position])`         返回布尔值，表示参数字符串是否在原字符串的头部或指定位置
 - `endsWith(str, [position])`            返回布尔值，表示参数字符串是否在原字符串的尾部或指定位置
 
 ```js
