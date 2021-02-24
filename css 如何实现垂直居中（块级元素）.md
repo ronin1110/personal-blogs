@@ -10,8 +10,8 @@
   position:absolute;
   top:50%;
   left:50%;
-  margin-left:-50px; // 元素宽度一般
-  margin-top:-50px; // 高度的一般
+  margin-left:-50px; // 元素宽度一半
+  margin-top:-50px; // 高度的一半
 }
 ```
 
@@ -38,7 +38,7 @@
   width:100px;
   height:100px;
   background:red;
-  position:ausolute;
+  position:absolute;
   top:0;
   bottom:0;
   left:0;
@@ -78,7 +78,7 @@
   height:300px;
   background:red;
   
-  texe-align:center;
+  text-align:center;
   display:table
 }
 .son{

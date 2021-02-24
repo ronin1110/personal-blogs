@@ -16,8 +16,8 @@ Function.prototype.myCall = function (thisArg, ...args) {
     return new TypeError('error')
   } // 判断调用的对象是不是函数，不是的话就返回个error
   // const fn = Symbol ('fn') // 声明一个独有的symbol属性，防止覆盖原本就有个fn函数
-  thisArg = thisArg || window // 如果没有传入上下文 默认是全局的window
-  thisArg.fn = this // this指向call的对象
+  let thisArg = thisArg || window // 如果没有传入上下文 默认是全局的window
+  thisArg.fn = this // this指向call的对象（函数赋值）
   const result = thisArg.fn(...args) // 执行函数
   delete thisArg.fn // 删除fn属性
   return result // 返回结果

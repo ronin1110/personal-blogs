@@ -56,7 +56,7 @@ runAsync().then(function(data){
 });
 ```
 
-then函数接受一盒函数参数，接受的函数的参数就是在Promise对象中resolve()中的data，当然这个传入的参数也可以是Promise对象，就可以再在后面接上then函数处理，就用到了链式调用
+then函数接受一个函数参数，接受的函数的参数就是在Promise对象中resolve()中的data，当然这个传入的参数也可以是Promise对象，就可以再在后面接上then函数处理，就用到了链式调用
 
 ```js
 runAsync1()

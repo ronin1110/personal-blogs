@@ -6,7 +6,7 @@
 
 ## async，await的优点
 
-1. 方便奶奶级联调用，即调用依次发生的场景；
+1. 方便级联调用，即调用依次发生的场景；
 2. 同步代码的编写方式，Promise用到的是通过.then()函数链式调用，横向写法，这样写结构容易理解，async/await则是同步编写的方式，顺序编写，
 3. 多个参数传递方便，Promise当然可以通过封装成对象来实现多参数的传递，不过相比于async/await来说，后者可以通过let const来定义变量
 4. 基于协程：promise是基于函数思想，把异步的过程封装起来，返回异步操作的结果，async/await则是协程的机制，是真正的“保存上下文，控制权切换……控制权恢复，取回上下文”这种机制，是对异步过程更精确的一种描述；
@@ -30,7 +30,7 @@
 
 1. await只能在async中存在，不能在普通函数中
 2. await 后面跟一个promise对象，（本质上是个运算符，得到一个结果，如果返回的是一个promise，就会执行promise的then函数得到结果数据）
-3. await 等待的是 后面跟着的promise.resolve（data）的结果
+3. await 等待的时候 后面跟着的promise.resolve（data）的结果
 4. await对于error消息的处理：await只关心后面promise的resolve()的结果，对于reject()不做处理，可以直接后面的promise对象自己定义catch来处理，也可以像我上面说的那样，在async函数return promise之后，定义async函数的catch处理子await中的error
 5. await对于结果处理：是个运算符，作用就是如果await后面的是个数据，就返回数据，如果是promise对象，await就会阻塞后面的代码，直到promise执行完resolve()函数，得到数据结果，才会返回这个数据，这里的阻塞 并不会造成主线程的阻塞，因为是异步中的，这也是为什么await得在async函数中，
 
