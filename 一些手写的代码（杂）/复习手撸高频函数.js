@@ -160,3 +160,67 @@ sleep().then(time => {
 }
   
 )
+
+// js中的继承
+function Animal(name) {
+  this.name = name
+  this.sleep = function() {
+    console.log(this.name + 'sleep');
+  }
+}
+Animal.prototype.eat = function() {
+  console.log(this.name + 'eat something')
+}
+
+//原型链继承 父级的实例作为子级的原型对象 
+function Cat() {
+  this.prototype = new Animal()
+  this.name = 'cat'
+}
+
+// 构造函数继承
+function Dog() {
+  Animal.call(this)
+  this.name= name || 'dog'
+}
+
+// 组合继承
+function Pig() {
+
+  Animal.call(this)
+  this.name = 'pig'
+
+  this.prototype = new Animal()
+  this.prototype.constructor = this
+}
+
+
+// 防抖
+function debouncing(fn, time) {
+  let timeout = null;
+  return function() {
+    let _this =this
+    clearTimeout(timeout)
+    let args = arguments
+    timeout = setTimeout(() => {
+      fn.apply(_this, args)
+    }, time)
+  }
+}
+
+// 节流
+function throttle(fn, time) {
+  let timeout
+  return function() {
+    let _this = this
+    let args = arguments
+    if(timeout) {
+      return 
+    } else{
+      timeout = setTimeout(()=>{
+        fn.apply(_this, args)
+        timeout = null
+      }, time)
+    }
+  }
+}

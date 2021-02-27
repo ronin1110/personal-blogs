@@ -14,7 +14,6 @@ function Animal(name) {
 Animal.prototype.eat = function(food) {
 	console.log(this.name + 'eat...' + food)
 }
-
 ```
 
 
@@ -25,7 +24,7 @@ Animal.prototype.eat = function(food) {
 function Cat () {
 }
 Cat.prototype = Animal()
-Cat.prototype,name = 'cat' // 同等于Animal.name = 'cat'
+Cat.prototype.name = 'cat' // 同等于Animal.name = 'cat'
 let cat = new Cat
 ```
 
