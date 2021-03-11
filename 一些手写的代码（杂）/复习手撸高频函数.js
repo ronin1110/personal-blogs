@@ -224,3 +224,62 @@ function throttle(fn, time) {
     }
   }
 }
+
+// 数组扁平化
+let res = []
+function myFlat(target) {
+  target.forEach((item ,index) =>{
+    if ( Array.isArray(item) ) {
+      myFlat(item)
+    } else {
+      res.push(item)
+    }
+  })
+}
+// 或者es6的flat函数
+res = res.flat(Infinity)
+
+
+
+// 实现一个eventEmiter类 包括on()，off()，once(),emit()方法
+// 1、on(event,fn)：监听event事件，事件触发时调用fn函数；
+// 2、once(event,fn)：为指定事件注册一个单次监听器，单次监听器最多只触发一次，触发后立即解除监听器；
+// 3、emit(event,arg1,arg2,arg3...)：触发event事件，并把参数arg1,arg2,arg3....传给事件处理函数；
+// 4、off(event,fn)：停止监听某个事件。
+
+class EventEmitter{
+  constructor() {
+    this._events = {}
+  }
+
+  on(event, callback) {
+    let callbacks = this._events[event] || []
+    callbacks.push(callback)
+    this._events[event] = callbacks
+    return this
+  }
+
+  off(event, callback) {
+    let callbacks = this._events[event]
+    this._events[event] = callbacks && callbacks.filter(fn => fn !== callback)
+    return this
+  }
+
+  emit(...args) {
+    const event = args[0]
+    const params = [].slice.call(args, 1)
+    const callbacks = this._events[event]
+    callbacks.forEach(fn => fn.apply(this.params))
+    return this
+  }
+
+  once(event, callback){
+    let wrapFanc = (...args) => {
+      callback.apply(this.args)
+      this.off(event, wrapFanc)
+    }
+    this.on(event, wrapFanc)
+    return this
+  }
+
+}
