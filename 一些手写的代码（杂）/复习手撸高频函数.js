@@ -44,8 +44,9 @@ function clone(obj, map = new Map) { // map用于防止循环引用，
     }
     map.set(obj, cloneObj)
     for(let key in obj) {
-      obj[key] = clone(obj[key], map)
+      cloneObj[key] = clone(obj[key], map)
     }
+    return cloneObj
   } else {
     return obj
   }
@@ -89,6 +90,48 @@ function myPromise(executor) {
   this.status = 'pending'
   let resolveCallbacks = []
   let rejectCallbacks = []
+  function resolve(value) {
+    if(self.status === 'pending') {
+      self.value = value
+      self.status = 'resolved'
+      resolveCallbacks.forEach(fn => {
+        fn(value)
+      })
+    }
+
+  }
+  function reject(reason) {
+    if(self.status === 'pending') {
+      self.value = reason
+      self.status = 'rejected'
+      rejectCallbacks.forEach(fn => {
+        fn(value)
+      })
+    }
+
+  }
+  executor(resolve, reject)
+}
+myPromise.prototype.then = function(onFulfilled, onRejected) {
+  let self = this
+  if(self.status === 'resolved') {
+    onFulfilled(self.value)
+  }
+  if(self.status === 'rejected') {
+    onRejected(self.value)
+  }
+  if(self.status === 'pending') {
+    self.resolveCallbacks.push(onFulfilled)
+    self.rejectCallbacks.push(onRejected)
+  }
+}
+
+// 手写Promise
+function myPromise(executor) {
+  let self = this
+  this.status = 'pending'
+  let resolveCallbacks = []
+  let rejectCallbacks = []
 
   function resolve(value) {
     if(self.status === 'pending') {
@@ -96,7 +139,7 @@ function myPromise(executor) {
       self.value = value
       self.status = 'resolved'
       resolveCallbacks.forEach((fn) => {
-        fn(value)
+        fn(self.value)
       })
     }
   }
@@ -107,13 +150,14 @@ function myPromise(executor) {
       self.value = reason
       self.status = 'rejected'
       rejectCallbacks.forEach((fn) => {
-        fn(value)
+        fn(self.value)
       })
     }
   }
-
   executor(resolve, reject)
 }
+
+
 
 myPromise.prototype.then = function(onFulfilled, onRejected) {
   let self = this
@@ -196,10 +240,10 @@ function Pig() {
 
 
 // 防抖
-function debouncing(fn, time) {
+function debounce(fn, time) {
   let timeout = null;
   return function() {
-    let _this =this
+    let _this = this
     clearTimeout(timeout)
     let args = arguments
     timeout = setTimeout(() => {
@@ -283,3 +327,445 @@ class EventEmitter{
   }
 
 }
+
+// 原型继承
+function Person (name) {
+  this.name = name || 'ququuq'
+  this.getName = function() {
+    console.log(this.name)
+  }
+}
+let person = new Person('姚霖')
+let me = Object.create(person)
+
+me.getName()
+
+
+//es5去重
+let arr = [3, 6, 4, 6, 7, 6, 5, 4, 1]
+let res = []
+arr.forEach((item, index) => {
+  if (index === arr.indexOf(item)) {
+    res.push(item)
+  }
+})
+console.log(res)
+// es6去重 Set
+let arr = [3, 6, 4, 6, 7, 6, 5, 4, 1]
+let res = Array.from(new Set(arr))
+console.log(res);
+
+
+// es5的数组扁平化
+let test = [1, 2, 3, 4, [5, 6, [7, 8]]]
+let res = []
+function myFlat(arr) {
+  if (Array.isArray(arr)) {
+    arr.forEach(item => {
+      myFlat(item)
+    })
+  } else {
+    res.push(arr)
+  }
+}
+myFlat(test)
+console.log(res);
+
+// es6扁平化
+let test = [1, 2, 3, 4, [5, 6, [7, 8]]]
+let res = test.flat(Infinity)
+
+// 冒泡排序 
+let arr = [1,4,2,3,4,5,76,8,7,4,3,2,6,8]
+function sortBob(arr) {
+
+  for (let i = 0; i < arr.length; i++) {
+    for (let j = i; j < arr.length; j++) {
+      if(arr[i] < arr[j]) {
+        let temp = arr[i]
+        arr[i] = arr[j]
+        arr[j] = temp
+      }
+    }
+  }
+  return arr
+}
+
+// 选择排序
+let arr = [1,4,2,3,4,5,76,8,7,4,3,2,6,8]
+function sortSelect(arr) {
+  let res = []
+
+  while(arr.length != 0) {
+    let max = arr[0]
+    let index = 0
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i] >= max) {
+        max = arr[i]
+        index = i
+      }
+      // console.log(index);
+    }
+    arr.splice(index, 1)
+    // console.log(arr.length);
+    res.push(max)
+  }
+  return res
+}
+sortSelect(arr)
+
+// 插入排序
+let arr = [1,4,2,3,4,5,76,8,7,4,3,2,6,8]
+function sortInsert(arr) {
+
+}
+sortInsert(arr)
+
+// 快排
+let arr = [1,4,2,3,4,5,76,8,7,4,3,2,6,8]
+function sortFast(arr) {
+  if(arr.length <=1) {
+    return arr
+  } else {
+    let right = []
+    let left = []
+    let temp = arr.splice(0, 1)
+    for (let i = 0; i < arr.length; i++) {
+      if(arr[i] > temp) {
+        left.push(arr[i])
+      } else {
+        right.push(arr[i])
+      }
+    }
+    // console.log(left.concat(right));
+    return sortFast(left).concat(temp, sortFast(right))
+  }
+}
+sortFast(arr)
+
+
+let myAjax= {
+  get:function(url) {
+    return new Promise(function(resolve, reject) {
+      let xhr = new XMLHttpRequest
+      xhr.open('GET', url, true)
+      xhr.onreadystatechange = function() {
+        if(xhr.readyState === 4) {
+          if(xhr.status === 200 || xhr.status === 304) {
+            console.log(xhr.responseText);
+            resolve(xhr.responseText)
+          }
+        }
+      }
+      xhr.send()
+    })
+  }.then(res => {
+    console.log(res);
+  }),
+  post:function(url,data) {
+    return new Promise(function(resolve, reject) {
+      let xhr = new XMLHttpRequest
+      xhr.open('POST', url, true)
+      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
+      xhr.onreadystatechange = function() {
+        if(xhr.readyState === 4) {
+          if(xhr.status === 200 || xhr.status === 304) {
+            console.log('post:',xhr.responseText);
+            resolve(xhr.responseText)
+          }
+        }
+      }
+      xhr.send(data)
+    })
+  }.then(res => {
+    console.log(res);
+  })
+
+}
+
+// 柯里化
+function curry(...args1) {
+  let args = Array.from(args1)
+
+  let fn = function(...args2) {
+    return curry.apply(null, args.concat(Array.from(args2)))
+  }
+  fn.toString = function() {
+    let res = 0
+    args.forEach(item => {
+      res += item
+    })
+    return res
+  }
+  
+  return fn
+}
+
+
+// 防抖
+function debounce(fn, delay) {
+  let timer = null
+
+  return function() {
+    if(timer) {
+      clearTimeout(timer)
+      timer = null
+    }
+    timer = setTimeout(fn, delay)
+  }
+}
+
+// 节流 
+// function throttle(fn, time) {
+//   // let time = new Date()
+//   let first = true
+//   let start = ''
+//   return function() {
+
+//     if(first) {
+//       start = new Date()
+//       first = false
+//     }
+//     if(new Date() - start >time) {
+//       fn()
+//       console.log(new Date() - start);
+//       first = true
+//     }
+//   }
+// }
+// 方法2
+function throttle(fn, time) {
+  // let time = new Date()
+  let timer
+  return function() {
+    if(timer) {
+      return
+    } else {
+      timer = setTimeout(() => {
+        fn()
+        timer =null
+      }, time)
+    }
+  }
+}
+function handle() {    
+  console.log(Math.random())
+}
+// 滚动事件
+window.addEventListener('scroll', throttle(handle, 1000));
+
+// 数组扁平化
+let res =[]
+function flat(arr) {
+  if(Array.isArray(arr)) {
+    arr.forEach(item => {
+      flat(item)
+    })
+  } else {
+    res.push(arr)
+  }
+}
+let test = [1,2,3,4, [4,3,[4,5,6],4,5]]
+flat(test)
+
+
+// 去重
+let test = [1,1,1,1,1,1,2,3,4,5,5,5,5]
+function unique (arr) {
+  // return Array.from(new Set(arr)) 使用Set
+
+  // let map = new Map  // map存
+  // let res = []
+  // arr.forEach((item, index) => {
+  //   if(!map.has(item)) {
+  //     map.set(item , true)
+  //     res.push(item)
+  //   }
+  // })
+  // return res
+
+
+  let res =[]
+  arr.forEach((item, index) => {
+    if(arr.indexOf(item) === index) {
+      res.push(item)
+    }
+  })
+  return res
+}
+unique(test)
+
+
+// 深拷贝 
+function deepCopy(obj, map= new Map) {
+  let res = Array.isArray(obj) ? [] : {}
+
+  if(obj instanceof Object) {
+    if (map.get(obj)) {
+      return map.get(obj)
+    } else {
+
+      map.set(obj, res)
+      for(let key in obj) {
+        res[key] = deepCopy(obj[key], map)
+      }
+    }
+  } else {
+    res = obj
+  }
+  return res
+}
+let a = {
+  i: 4,
+  j:5
+}
+let b =deepCopy(a)
+b.i = 999
+console.log(a);
+
+// 发布订阅模式
+
+class myEvent {
+
+  constructor() {
+    this.events = {}
+  }
+  on(eventName, callback) {
+    if(!this.events[eventName]) {
+      this.events[eventName] = [callback]
+    } else {
+      this.events[eventName].push(callback)
+    }
+  }
+
+  emit(eventName, ...rest) {
+    this.events[eventName] && 
+    this.events[eventName].forEach(callback => {
+      callback.apply(this, rest)
+    })
+  }
+}
+
+let myE = new myEvent
+function fn(...args) {
+  console.log(...args);
+}
+function fn2(...args) {
+  console.log('woiewpo');
+}
+myE.on('click', fn)
+myE.on('click', fn2)
+myE.emit('click', 1,2,3,4,5,6)
+
+
+
+// es5实现继承
+function Parent(name) {
+  this.type = 'parent'
+  this.name = name
+}
+Parent.prototype.say = function() {
+  console.log(this.name);
+}
+
+function Child(name) {
+  this.name = name
+  Parent.call(this, name)
+}
+// 原型连继承
+// Child.prototype = new Parent()
+// let c1 =new Child('yaolin')
+
+// 实现instanceof
+function myInstanceof(obj, con) {
+  let tempObj = obj
+  while(tempObj.__proto__) {
+    if(con.prototype == tempObj.__proto__) {
+      return true
+    } else {
+      tempObj=tempObj.__proto__
+    }
+  }
+  return false
+}
+
+
+// call
+function myCall(context = window, ...args) { 
+  const handle = Symbol('879')
+  context[handle] = this
+
+  let res = context[handle](...args)
+  delete context[handle]
+  return res
+}
+//  apply
+function myApply(context = window, args) { 
+  const handle = Symbol('879')
+  context[handle] = this
+
+  let res = context[handle](...args)
+  delete context[handle]
+  return res
+}
+
+// bind
+function myBind(context = window, ...args1) {
+  let _this = this
+  return function(...args2) {
+    _this.apply(context, args1.concat(args2))
+  }
+}
+// new 
+function myNew (constructor, ...args) {
+  let obj = Object.create(new constructor)
+  let res = constructor.apply(obj, args)
+	//如果构造函数没有返回一个对象,则返回新创建的对象
+	//如果构造函数返回了一个对象,则返回那个对象
+	//如果构造函数返回原始值,则当作没有返回对象
+  return typeof res === 'object' ? res : obj
+  
+}
+
+// 封装ajax
+function myAjax(){
+  this.get = function(url) {
+    return new Promise((resolve, reject) => {
+      let xhr = new XMLHttpRequest
+      xhr.open('GET', url, true)
+      xhr.onreadystatechange = function() {
+        if(xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            resolve(xhr.responseText)
+          }
+
+        }
+      }
+      xhr.send()
+    }).then((res) => {
+      console.log(res);
+    }).catch(error => {
+      console.log(error);
+    })
+  }
+  this.post = function(url,data) {
+    return new Promise((resolve, reject) => {
+      let xhr = new XMLHttpRequest
+      xhr.open('POST', url, true)
+      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
+      xhr.onreadystatechange = function() {
+        if(xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            resolve(xhr.responseText)
+          }
+        }
+      }
+      xhr.send(data)
+    }).then((res) => {
+      console.log(res);
+    }).catch(error => {
+      console.log(error);
+    })
+  }
+}
+
