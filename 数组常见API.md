@@ -59,7 +59,7 @@ sort函数如果直接调用会按照英语字母的升序排序
 
 也可以传入函数参数，实现对数字的排序
 
-array.sort() // 字幕升序
+array.sort() // 数字升序
 
 array.sort(dunction(a, b) { return a - b}) // 数字升序
 

@@ -40,7 +40,7 @@ function clone(obj, map = new Map) { // map用于防止循环引用，
   if(typeof obj === 'object') {
     let cloneObj = Array.isArray(obj) ? {} : []
     if(map.get(obj)) {
-      return map.get(obj)
+      return obj
     }
     map.set(obj, cloneObj)
     for(let key in obj) {
@@ -90,7 +90,7 @@ function myPromise(executor) {
   this.status = 'pending'
   let resolveCallbacks = []
   let rejectCallbacks = []
-  function resolve(value) {
+  let resolve = function (value) {
     if(self.status === 'pending') {
       self.value = value
       self.status = 'resolved'
@@ -98,9 +98,8 @@ function myPromise(executor) {
         fn(value)
       })
     }
-
   }
-  function reject(reason) {
+  let reject = function (reason) {
     if(self.status === 'pending') {
       self.value = reason
       self.status = 'rejected'
@@ -108,7 +107,6 @@ function myPromise(executor) {
         fn(value)
       })
     }
-
   }
   executor(resolve, reject)
 }
@@ -378,7 +376,6 @@ let res = test.flat(Infinity)
 // 冒泡排序 
 let arr = [1,4,2,3,4,5,76,8,7,4,3,2,6,8]
 function sortBob(arr) {
-
   for (let i = 0; i < arr.length; i++) {
     for (let j = i; j < arr.length; j++) {
       if(arr[i] < arr[j]) {
@@ -769,3 +766,284 @@ function myAjax(){
   }
 }
 
+// 实现promise.all
+function promiseAll (arr) {
+  return new Promise((resolve, reject) => {
+    let count = 0 
+    let result = []
+    for (let i = 0; i < arr.length; i++) {
+      arr[i].then(res => {
+        result[i] = res
+        count ++
+        if(count === arr.length) {
+          resolve(result) 
+        }
+      })
+
+      
+    }
+  })
+
+
+}
+// 实现promise.race
+function promiseRace (arr) {
+  return new Promise((resolve, reject) => {
+    for (let i = 0; i < arr.length; i++) {
+      arr[i].then(res => {
+        resolve(res)
+      })
+    }
+  })
+
+}
+
+
+// 柯里化
+function curry(...args1) {
+  let args = args1
+  let fn = function(...args2) {
+    return curry.apply(null, args.concat(args2))
+  } 
+  fn.toString = function() {
+    let res = 0
+    args.forEach((item, index) => {
+      res += item
+    })
+    return res
+  }
+  return fn
+}
+
+// 手写new
+function myNew (constructor, ...args) {
+  let obj = Object.create(constructor.prototype)
+  let res = constructor.apply(this, args)
+  return typeof res === 'object' ? res : obj
+}
+
+function myCall (context, ...args) {
+  let _this = this
+  let fn = new Symbol('223')
+  context[fn] = this
+  let res = context[fn](...args)
+  delete context[fn]
+  return res
+}
+// bind
+Function.prototype.bind2 = function(context, ...args1) {
+  let args = args1
+  let _this = this
+  return function(args2) {
+    return _this.apply(context, args.concat(args2))
+  }
+}
+
+// new
+function myNew(constructor, ...args) {
+  let obj = Object.create(constructor.prototype)
+  let res = constructor.apply(obj, args)
+  return typeof res === 'object' ? res : obj
+}
+
+// Promise
+function myPromise(executor) {
+  let _this = this
+  this.value = ''
+  this.status = 'pending'
+  this.resolvedCallbacks = []
+  this.rejectedCallbacks = []
+
+  let resolve = function(value) {
+    // console.log(_this.status);
+    if(_this.status == 'pending') { 
+      
+      _this.status = 'resolved'
+      console.log(_this.resolvedCallbacks);
+      _this.value = value
+      _this.resolvedCallbacks.forEach(fn => {
+        fn.call(_this, value)
+      })
+    }
+  }
+  let reject = function(value) {
+    if(_this.status == 'pending') {
+      _this.status = 'rejected'
+      _this.reason = value
+      rejectedCallbacks.forEach(fn => {
+        fn.call(_this, value)
+      })
+    }
+  }
+
+  executor(resolve, reject)
+}
+myPromise.prototype.then = function(onFulfilled, onRejected) {
+  if(this.status === 'pending') {
+    this.resolvedCallbacks.push(onFulfilled)
+    this.rejectedCallbacks.push(onRejected)
+  }
+  if(this.status === 'resolved') {
+    return onFulfilled(this.value)
+  }
+  if(this.status === 'rejected') {
+    return onRejected(this.value)
+  }
+}
+// Promise.all
+Promise.prototype.myAll = function(arr){
+  return new Promise((resolve, reject) => {
+    let count = 0
+    let res = []
+    for (let i = 0; i < arr.length; i++) {
+      arr[i].then((val) => {
+        res.push(val)
+        count++
+        if(count === arr.length) {
+          resolve(res)
+        }
+      })
+      
+    }
+  })
+}
+// Promise.race
+Promise.prototype.myRace = function(arr){
+  return new Promise((resolve, reject) => {
+    for (let i = 0; i < arr.length; i++) {
+      arr[i].then((val) => {
+        resolve(val)
+      })
+    }
+  })
+}
+
+
+
+// deepClone
+function deepClone(obj, map = new Map) {
+  if(typeof obj !== 'object') {
+    return obj
+  } else {
+    let o = Array.isArray(obj) ? [] : {}
+    if(map.get(obj)) {
+      return obj
+    }
+    map.set(obj, o)
+    for (let key in obj) {
+
+      o[key] = deepClone(obj[key], map)
+    }
+    return o
+  }
+}
+
+
+// curry
+function curry(...args1) {
+  let _args = args1
+
+  let fn = function(...args2) {
+    return curry.apply(null, _args.concat(args2))
+  }
+  fn.toString = function() {
+    let res = 0
+    _args.forEach((num)=> {
+      res += num
+    })
+    return res
+  }
+
+  return fn
+}
+curry(1)(4)(7)
+
+// flat
+function flat(arr) {
+  let res = []
+  function next(arr) {
+    if(Array.isArray(arr)) {
+      arr.forEach((item) => {
+        next(item)
+      })
+    } else {
+      res.push(arr)
+    }
+  }
+  next(arr)
+  return res
+}
+flat( [1, 2, 3, 4, [1, 2, 3, [1, 2, 3, [1, 2, 3]]], 5, "string", { name: "弹铁蛋同学" }] )
+
+// 防抖
+function debounce(fn, time) {
+  let timer
+  return function(...args) {
+    let _this = this
+
+    window.clearTimeout(timer)
+    timer = window.setTimeout(function() {
+      fn.apply(_this, args)
+    }, time) 
+  }
+}
+let fn = function(e) {
+  console.log(e);
+}
+document.addEventListener('click', debounce(fn, 1000))
+
+// 节流
+function throttle(fn, time) {
+  let t1
+  let flag = true
+  return function(...args) {
+    let _this = this
+    if(flag) {
+      flag = false
+      window.setTimeout(function() {
+        flag = true
+        fn.apply(_this, args)
+      }, time) 
+    }
+
+  }
+}
+
+
+// instanceof
+function myInstanceof(obj, constructor) {
+  let c_proto = constructor.prototype
+  while(obj.__proto__) {
+    if(c_proto == obj.__proto__) {
+      return true
+    }
+    obj = obj.__proto__
+  }
+  return false
+}
+let a  = []
+myInstanceof(a, Function)
+
+// 千分位分割
+function numFormat(num) {
+  num = num.toString()
+  let left = num.split('.')[0]
+  let right = num.split('.')[1]
+  console.log(right);
+  left = left.split('').reverse()
+  let res = []
+  for (let i = 0; i < left.length; i++) {
+    if(i % 3 == 2 && i!==0 && i!== left.length-1) {
+      res.push(left[i])
+      res.push(',')
+    } else {
+      res.push(left[i])
+    }
+  }
+  res = res.reverse()
+  return right ? res.join('')+'.' + right : res.join('')
+}
+var a= 1234567894532;
+var b= 673439.4542;
+console.log(numFormat(a)); // "1,234,567,894,532"
+console.log(numFormat(b)); // "673,439.4542"

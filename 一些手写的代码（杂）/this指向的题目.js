@@ -22,10 +22,10 @@ console.log('outer: ' + this)
 
 var name = 'window name'
 var a = {
-    name: 'ronin',
-    fn: function() {
-      console.log(this.name)
-    }
+  name: 'ronin',
+  fn: function() {
+    console.log(this.name)
+  }
 }
 a.fn() // 这里的fn的调用山下文是a 所以输出的是a.name
 // 输出 
